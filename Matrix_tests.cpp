@@ -31,6 +31,28 @@ TEST(test_fill_basic) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_width) {
+  Matrix *mat = new Matrix; // create a Matrix in dynamic memory
+
+  const int width = 3;
+  const int height = 5;
+  Matrix_init(mat, width, height);
+  ASSERT_EQUAL(Matrix_width(mat), width);
+
+  delete mat;
+}
+
+TEST(test_matrix_height) {
+   Matrix *mat = new Matrix; // create a Matrix in dynamic memory
+
+   const int width = 3;
+   const int height = 5;
+   Matrix_init(mat, width, height);
+   ASSERT_EQUAL(Matrix_height(mat), height);
+
+   delete mat;
+}
+
 // ADD YOUR TESTS HERE
 // You are encouraged to use any functions from Matrix_test_helpers.h as needed.
 
