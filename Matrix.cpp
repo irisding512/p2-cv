@@ -114,7 +114,15 @@ int Matrix_max(const Matrix* mat) {
 //           the leftmost one.
 int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
                                       int column_start, int column_end) {
-  return 0;
+    int j = column_start;
+    int min_col = column_start;
+ 
+    for ( j ; j<column_end ; j++ ){
+      if ((*Matrix_at(mat, row, j)) < (*Matrix_at(mat, row, min_col)))
+        min_col = j;
+    }
+
+    return min_col;
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -126,5 +134,11 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
 //           column_start (inclusive) and column_end (exclusive).
 int Matrix_min_value_in_row(const Matrix* mat, int row,
                             int column_start, int column_end) {
-  return 0;
+    int j = column_start;
+    int min_row = *Matrix_at(mat, row, column_start);
+
+    for ( j ; j<column_end ; ++j) {
+        if ((*Matrix_at(mat, row, j)) < (min_row)) {
+            min_row = *Matrix_at(mat, row, j);
+        }
 }
