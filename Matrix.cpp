@@ -79,7 +79,7 @@ int Matrix_column(const Matrix* mat, const int* ptr) {
 // EFFECTS:  Returns a pointer to the element in the Matrix
 //           at the given row and column.
 int* Matrix_at(Matrix* mat, int row, int column) {
-  return (mat->data[(row * mat->width) + column]);
+  return (mat->data(row * mat->width) + column);
 }
 
 // REQUIRES: mat points to a valid Matrix
