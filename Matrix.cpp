@@ -89,8 +89,7 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 // EFFECTS:  Returns a pointer-to-const to the element in
 //           the Matrix at the given row and column.
 const int* Matrix_at(const Matrix* mat, int row, int column) {
-    const int *p = &(mat->data[(row * mat->width) + column]);
-    return p;
+  return mat->data + (row * mat->width) + column;
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -108,7 +107,22 @@ void Matrix_fill(Matrix* mat, int value) {
 //           the given value. These are all elements in the first/last
 //           row or the first/last column.
 void Matrix_fill_border(Matrix* mat, int value) {
-  for (int i = 0; i < )
+  //first row
+  for (int i = 0; i < mat->width; i++) {
+    mat->data[i] = value;
+  }
+  //last row
+  for (int j = sizeof(mat->data); j > ((sizeof(mat->data)) - mat->width); j++) {
+    mat->data[j] = value;
+  }
+  //first column
+  for (int k = mat->width; k < (2 * (mat->width)); k++) {
+    mat->data[k] = value;
+  }
+  //last column
+  for (int l = mat->width - 1; l < (2 * (mat->width) - 1); l++) {
+    mat->data[l] = value;
+  }
 }
 
 // REQUIRES: mat points to a valid Matrix
