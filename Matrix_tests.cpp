@@ -61,8 +61,8 @@ TEST(test_matrix_fill_border) {
    const int value = 69;
    const int value2 = 0;
    Matrix_init(mat, width, height);
-   Matrix_fill_border(mat, 69);
    Matrix_fill(mat, value2);
+   Matrix_fill_border(mat, value);
 
   //testing first row
   int r = 0;
