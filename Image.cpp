@@ -136,3 +136,5 @@ void Image_fill(Image* img, Pixel color) {
     Matrix_fill(&img->green_channel, color.g);
     Matrix_fill(&img->blue_channel, color.b);
 }
+
+
