@@ -78,8 +78,6 @@ static int squared_difference(Pixel p1, Pixel p2) {
 // ------------------------------------------------------------------
 // You may change code below this line!
 
-
-
 // REQUIRES: img points to a valid Image.
 //           energy points to a Matrix.
 // MODIFIES: *energy
@@ -89,8 +87,22 @@ static int squared_difference(Pixel p1, Pixel p2) {
 //           image is computed and written into it.
 //           See the project spec for details on computing the energy matrix.
 void compute_energy_matrix(const Image* img, Matrix* energy) {
-  assert(false); // TODO Replace with your implementation!
-  assert(squared_difference(Pixel(), Pixel())); // TODO delete me, this is here to make it compile
+
+  Matrix_init (energy, Image_width (img), Image_height (img));
+
+    for (int i=1 ; i<Image_height(img)-1 ; i++) {
+      for (int j=1 ; j<Image_width(img)-1; j++) {
+        int north_south = squared_difference (Image_get_pixel(img, i - 1, j), 
+                          Image_get_pixel(img, i + 1, j));
+        int east_west = squared_difference (Image_get_pixel(img, i, j - 1), 
+                        Image_get_pixel(img, 1, j + 1));
+        
+        *Matrix_at (energy, i, j) = north_south + east_west;
+      }
+    }
+        
+    int total_max = Matrix_max (energy);
+    Matrix_fill_border (energy, total_max);
 }
 
 
@@ -104,7 +116,29 @@ void compute_energy_matrix(const Image* img, Matrix* energy) {
 //           computed and written into it.
 //           See the project spec for details on computing the cost matrix.
 void compute_vertical_cost_matrix(const Matrix* energy, Matrix *cost) {
-  assert(false); // TODO Replace with your implementation!
+    
+    Matrix_init (cost, Matrix_width(energy), Matrix_height (energy));
+    
+    for (int j=0 ; j<Matrix_width(cost) ; j++) {
+      *Matrix_at (cost, 0, j) = *Matrix_at (energy, 0, j);
+    }
+    
+    for (int i=1 ; i<Matrix_height(cost) ; i++) {
+      for (int j=0 ; j<Matrix_width(cost) ; j++) {
+        if (j==0) {
+          int south2_east = Matrix_min_value_in_row (cost, i-1, j, j+2);
+          *Matrix_at (cost, i, j) = *Matrix_at (energy, i, j) + south2_east;
+        }
+          else if (j==Matrix_width(cost) - 1) {
+            int south2_west = Matrix_min_value_in_row (cost, i-1, j-1, j+1);
+            *Matrix_at (cost, i, j) = *Matrix_at (energy, i, j) + south2_west;
+          }
+          else {
+            int south = Matrix_min_value_in_row (cost, i-1, j-1, j+2);
+            *Matrix_at (cost, i, j) = *Matrix_at (energy, i, j) + south;
+          }
+      }
+    }
 }
 
 
@@ -145,7 +179,7 @@ void find_minimal_vertical_seam(const Matrix* cost, int seam[]) {
       }     
   }
 }
-
+       
 
 // REQUIRES: img points to a valid Image with width >= 2
 //           seam points to an array
@@ -175,14 +209,19 @@ void remove_vertical_seam(Image *img, const int seam[]) {
       else {
         Image_set_pixel (newImg, new_row, new_col, Image_get_pixel(img, row, col));
       }
+
     col++;
     new_col++;
     row++;
     new_row++;
   }
+
   *img = *newImg;
   delete newImg;
+
 }
+    
+
 
 
 // REQUIRES: img points to a valid Image
@@ -207,6 +246,7 @@ void seam_carve_width(Image *img, int newWidth) {
   }
 }
 
+
 // REQUIRES: img points to a valid Image
 //           0 < newHeight && newHeight <= Image_height(img)
 // MODIFIES: *img
@@ -220,6 +260,7 @@ void seam_carve_height(Image *img, int newHeight) {
   rotate_right(img);
 }
 
+
 // REQUIRES: img points to a valid Image
 //           0 < newWidth && newWidth <= Image_width(img)
 //           0 < newHeight && newHeight <= Image_height(img)
@@ -230,4 +271,6 @@ void seam_carve_height(Image *img, int newHeight) {
 //           and then applying seam_carve_height(img, newHeight).
 void seam_carve(Image *img, int newWidth, int newHeight) {
   seam_carve_height(img, newHeight);
-  seam_carve_width(img, newWidth);}
+  seam_carve_width(img, newWidth);
+}
+
