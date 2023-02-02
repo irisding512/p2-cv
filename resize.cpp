@@ -1,74 +1,80 @@
-//Project UID af1f95f547e44c8ea88730dfb185559d
+// Project UID af1f95f547e44c8ea88730dfb185559d
 
 #include <iostream>
-#include "processing.h" 
 #include <fstream>
+#include <cstdlib>
 #include "Matrix.h"
-#include "Image.h"
-#include <iostream>
 #include <string>
+#include <cstring>
+
+#include "Image.h"
+#include "processing.h"
 
 using namespace std;
-  
-int main(int argc, char *argv[]) {
-    string filename = argv[1];
-    string output_file = argv[2]; 
-    int desiredWidth, desiredHeight = 0;
 
-    Image *img = new Image;
-    ifstream fin; 
+int main(int argc,char *argv[]) {
+   
+    ifstream fin;
     ofstream fout;
+    string filename = argv[1], outputfile = argv[2];
 
-    fin.open(filename); 
-    fout.open(output_file);
-    
-    if (!fin.is_open()){
-        cout << "Error opening file: " << filename << endl;
-          delete img;
-          return -1;
-    }
-
-    if (!fout.is_open()){
-        cout << "Error opening file: " << output_file << endl;
-          delete img;
-          return -1;
-    }
-
-    Image_init(img,fin);
-
-    if(argc == 5){
-        desiredWidth = atoi(argv[3]), desiredHeight = atoi(argv[4]);
-        if(!(desiredWidth > 0 && desiredWidth <= Image_width(img)) || 
-          !(desiredHeight > 0 && desiredHeight <= Image_height(img))){
-            cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl;
-            cout << "WIDTH and HEIGHT must be less than or equal to original" << endl;
-              delete img;
-              return -1;
-        }
-    }
-
-    else if(argc == 4){
-        desiredWidth = atoi(argv[3]), desiredHeight = Image_height(img);
-        if(!(desiredWidth > 0 && desiredWidth <= Image_width(img)) || 
-        !(desiredHeight > 0 && desiredHeight <= Image_height(img))){
-            cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl;
-            cout << "WIDTH and HEIGHT must be less than or equal to original" << endl;
-              delete img;
-              return -1;
-        }
-    }
-
-    else{
-        cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl;
+    if((argc != 4) && (argc !=5)){ 
+        cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl; 
         cout << "WIDTH and HEIGHT must be less than or equal to original" << endl;
-          delete img;
-          return -1;
+
+          return 1;
+    }
+  
+    Image *img = new Image;
+
+    fin.open(filename);
+    fout.open(outputfile);
+
+    if(!fin.is_open()){ 
+        cout << "Error opening file: " << filename << endl;
+        
+          return 1;
     }
 
-    seam_carve(img,desiredWidth,desiredHeight);
-    Image_print(img,fout);
-    fout.close(), fin.close();
+    if(!fout.is_open()){ 
+        cout << "Error opening file: " << outputfile << endl;
+        
+          return 1;
+    }
+
+    Image_init(img, fin);
+    const Image *imgptr = img;
+
+    if(argc == 5){ 
+        if(Image_height(imgptr) < atoi(argv[4]) || atoi(argv[4]) <= 0 || 
+           Image_width(imgptr) < atoi(argv[3]) || atoi(argv[3]) <= 0){
+            cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl;
+            cout << "WIDTH and HEIGHT must be less than or equal to original" << endl;
+            
+              return 1;
+        }
+    }
+    else { 
+        if(Image_width(imgptr) < atoi(argv[3]) || atoi(argv[3]) <= 0){
+            cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]" << endl;
+            cout << "WIDTH and HEIGHT must be less than or equal to original" << endl;
+            
+              return 1;
+        }
+    }
+
+    if(argc == 4){
+        seam_carve_width(img, atoi(argv[3]));
+        Image_print(imgptr, fout);
+
+          delete img;
+          return 0;
+    }
+
+    seam_carve(img, atoi(argv[3]), atoi(argv[4]));
+    Image_print(imgptr, fout);
 
       delete img;
       return 0;
-} 
+
+}
