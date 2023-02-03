@@ -168,13 +168,16 @@ void find_minimal_vertical_seam(const Matrix* cost, int seam[]) {
 
         else {
           if (seam [r + 1] == 0) {
-            seam[r] = Matrix_column_of_min_value_in_row(cost, r,seam[r - 1],seam[r - 1] + 2);
+            seam[r] = Matrix_column_of_min_value_in_row(cost, 
+                              r,seam[r - 1],seam[r - 1] + 2);
           }
           else if (seam [r+1] == Matrix_width (cost) - 1){
-            seam[r] = Matrix_column_of_min_value_in_row(cost, r,seam[r + 1] - 1,seam[r + 1]);
+            seam[r] = Matrix_column_of_min_value_in_row(cost, 
+                              r,seam[r + 1] - 1,seam[r + 1]);
           } 
           else {
-            seam[r] = Matrix_column_of_min_value_in_row(cost, r, seam[r + 1] - 1, seam[r + 1] + 2);
+            seam[r] = Matrix_column_of_min_value_in_row(cost, 
+                              r, seam[r + 1] - 1, seam[r + 1] + 2);
           }
       }     
   }

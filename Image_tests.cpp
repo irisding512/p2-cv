@@ -45,6 +45,49 @@ TEST(test_print_basic) {
   delete img; // delete the Image
 }
 
+TEST(test_image_init) {
+  Image *img = new Image; // create an Image in dynamic memory
+
+  Image_init(img, 7, 9);
+
+  ASSERT_EQUAL(Image_width(img), 7);
+  ASSERT_EQUAL(Image_height(img), 9);
+
+  delete img;
+}
+
+TEST(test_image_set_and_get_pixel) {
+  Image *img = new Image; // create an Image in dynamic memory
+ const Pixel red = {255, 0, 0};
+ const Pixel green = {0, 255, 0};
+ const Pixel blue = {0, 0, 255};
+
+  Image_set_pixel(img, 0, 0, red);
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).r, red.r);
+
+  Image_set_pixel(img, 0, 0, green);
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).g, green.g);
+
+  Image_set_pixel(img, 0, 0, blue);
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).b, blue.b);
+
+  delete img;
+}
+
+TEST(test_image_fill) {
+  Image *img = new Image;
+
+  Pixel pix {1, 1, 1};
+  Image_init(img, 5, 5);
+  Image_fill(img, pix);
+
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).r, pix.r);
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).g, pix.g);
+  ASSERT_EQUAL(Image_get_pixel(img, 0, 0).b, pix.b);
+
+  delete img;
+}
+
 // IMPLEMENT YOUR TEST FUNCTIONS HERE
 // You are encouraged to use any functions from Image_test_helpers.h as needed.
 

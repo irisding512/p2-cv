@@ -10,11 +10,15 @@
 // EFFECTS:  Initializes the Image with the given width and height.
 // NOTE:     Do NOT use new or delete here.
 void Image_init(Image* img, int width, int height) {
+    assert(0 < width && width <= MAX_MATRIX_WIDTH);
+    assert(0 < height && height <= MAX_MATRIX_HEIGHT);
+
     img->width = width;
     img->height = height;
-    Matrix_init(&img->red_channel,width,height);
-    Matrix_init(&img->green_channel,width,height);
-    Matrix_init(&img->blue_channel,width,height);
+
+    Matrix_init(&img->red_channel, width, height);
+    Matrix_init(&img->green_channel, width, height);
+    Matrix_init(&img->blue_channel, width, height);
 }
 
 
@@ -34,9 +38,9 @@ void Image_init(Image* img, std::istream& is) {
     Matrix_init(&img->green_channel,img->width,img->height);
     Matrix_init(&img->blue_channel,img->width,img->height);
 
-    int *red = Matrix_at(&img->red_channel,0,0);
-    int *green = Matrix_at(&img->green_channel,0,0);
-    int *blue = Matrix_at(&img->blue_channel,0,0);
+    int *red = Matrix_at(&img->red_channel, 0, 0);
+    int *green = Matrix_at(&img->green_channel, 0, 0);
+    int *blue = Matrix_at(&img->blue_channel, 0, 0);
     
       while (!is.eof()) {
         is >> *red;
@@ -122,6 +126,8 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 // EFFECTS:  Sets the pixel in the Image at the given row and column
 //           to the given color.
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
+    assert(0 <= row && row < img->height);
+    assert(0 <= column && column < img->width);
     *Matrix_at(&img->red_channel, row, column) = color.r;
     *Matrix_at(&img->green_channel, row, column) = color.g;
     *Matrix_at(&img->blue_channel, row, column) = color.b;
