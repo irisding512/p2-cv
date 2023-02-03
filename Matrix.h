@@ -17,7 +17,7 @@ const int MAX_MATRIX_HEIGHT = 500;
 
 // Representation of a 2D matrix of integers
 // Matrix objects may be copied.
-struct Matrix{
+struct Matrix {
   int width;
   int height;
   int data[MAX_MATRIX_WIDTH * MAX_MATRIX_HEIGHT];

@@ -131,13 +131,17 @@ TEST(test_column_of_min_value_in_row) {
 
   for (int i = 0; i < height; i++) {
     ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, 
-                  i, 0, width - 1), 0);
+                  i, 0, width), 0);
   }
 
   ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, 0, 0, 1), 0);
 
   *Matrix_at(mat, 1, 2) = value2;
   ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, 1, 1, 3), 2);
+
+  *Matrix_at(mat, 1, 1) = value2;
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, 1, 0, 3), 1);
+
 
   delete mat;
 }
@@ -152,9 +156,9 @@ TEST(test_min_value_in_row) {
    Matrix_init(mat, width, height);
    Matrix_fill(mat, value);
 
-  for (int i = 0; i < mat->height; i++) {
+  for (int i = 0; i < height; i++) {
     ASSERT_EQUAL(Matrix_min_value_in_row(mat, i, 0, 
-                          mat->width - 1), value);
+                          width), value);
   }
 
   ASSERT_EQUAL(Matrix_min_value_in_row(mat, 0, 0, 1), value);
@@ -164,6 +168,7 @@ TEST(test_min_value_in_row) {
 
   *Matrix_at(mat, 0, 1) = value3;
   ASSERT_EQUAL(Matrix_min_value_in_row(mat, 3, 0, 2), value);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 0, 0, 2), value3);
 
   delete mat;
 }
@@ -191,7 +196,7 @@ TEST(test_matrix_row) {
    Matrix_init(mat, width, height);
    Matrix_fill(mat, value);
 
-   int *ptr = Matrix_at(mat, 0, 0);  //&mat->data[0], changed / respect M 
+   int *ptr = Matrix_at(mat, 0, 0); 
    ASSERT_EQUAL(Matrix_row(mat, ptr), 0);
 
    int *ptr2 = Matrix_at(mat, 4, 2);
@@ -211,7 +216,7 @@ TEST(test_matrix_column) {
    Matrix_init(mat, width, height);
    Matrix_fill(mat, value);
 
-   int *ptr = Matrix_at(mat, 0, 0); //&mat->data[0], changed / respect M 
+   int *ptr = Matrix_at(mat, 0, 0);
    ASSERT_EQUAL(Matrix_column(mat, ptr), 0);
 
    int *ptr2 = Matrix_at(mat, 4, 2);

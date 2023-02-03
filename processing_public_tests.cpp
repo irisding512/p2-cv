@@ -175,7 +175,7 @@ void test_remove_seam(const Image* img, const int seam[],
   Image* removed_img_correct = new Image;
   load_image(removed_img_correct, prefix + "_removed.correct.ppm");
 
-  assert(Image_equal(removed_img, removed_img_correct));
+  assert(Image_equal(removed_img, removed_img_correct)); //issue
   cout << "PASS" << endl;
 
   delete removed_img_correct;

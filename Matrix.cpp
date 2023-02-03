@@ -12,6 +12,7 @@
 void Matrix_init(Matrix* mat, int width, int height) {
   assert(0 < width && width <= MAX_MATRIX_WIDTH);
   assert(0 < height && height <= MAX_MATRIX_HEIGHT);
+  
   mat->width = width;
   mat->height = height;
 }
@@ -89,12 +90,6 @@ int* Matrix_at(Matrix* mat, int row, int column) {
   assert(0 <= column && column < mat->width);
 
   return mat->data + (row * mat->width) + column;
-    //return mat->data + (row * mat->width + 1) - 1 + (column - 1);
-    /* int* ptr = &mat->data[0];
-    ptr = &mat->data[((row * (mat->width + 1))) - 1 + (column - 1)];
-    return ptr;
-    
-    */
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -108,21 +103,12 @@ const int* Matrix_at(const Matrix* mat, int row, int column) {
   assert(0 <= column && column < mat->width);
 
   return mat->data + (row * mat->width) + column;
-  /*  const int* ptr = &mat->data[0];
-    ptr = &mat->data[((row * (mat->width + 1))) - 1 + (column - 1)];
-    return ptr;
-  */
-  // return mat->data + (row * mat->width + 1) - 1 + (column - 1);
 }
 
 // REQUIRES: mat points to a valid Matrix
 // MODIFIES: *mat
 // EFFECTS:  Sets each element of the Matrix to the given value.
 void Matrix_fill(Matrix* mat, int value) {
-  /* for (int i = 0; i < sizeof(mat->data); i++) {
-    mat->data[i]  = value;
-  }
-  */
    for (int i = 0; i < mat->height; i++) {
       for (int j = 0; j < mat->width; j++) {
           *Matrix_at(mat, i, j) = value;
@@ -136,28 +122,6 @@ void Matrix_fill(Matrix* mat, int value) {
 //           the given value. These are all elements in the first/last
 //           row or the first/last column.
 void Matrix_fill_border(Matrix* mat, int value) {
-  /*
-  //first row
-  for (int i = 0; i < mat->width; i++) {
-    mat->data[i] = value;
-  }
-  //last row
-  for (int j = ((mat->height * mat->width)- 1); 
-      j >= (((mat->height * mat->width)) - mat->width); j--) {
-    mat->data[j] = value;
-  }
-  //first column
-  for (int k = 0; k < ((mat->height) * (mat->width));
-       k += (mat->width)) {
-    mat->data[k] = value;
-  }
-  //last column
-  for (int l = mat->width - 1; l <= ((mat->height) 
-      * (mat->width) - 1); l += (mat->width)) {
-    mat->data[l] = value;
-  }
-  */
-  //first row
   for (int j = 0; j < mat->width; j++) {
     *Matrix_at(mat, 0, j) = value;
   }

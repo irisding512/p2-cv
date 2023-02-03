@@ -32,7 +32,7 @@ void Image_init(Image* img, int width, int height) {
 // NOTE:     Do NOT use new or delete here.
 void Image_init(Image* img, std::istream& is) {
     std::string whitespace = " ";
-    is >> whitespace >> img->width >> img->height >> whitespace;
+	is >> whitespace >> img->width >> img->height >> whitespace;
 
     Matrix_init(&img->red_channel,img->width,img->height);
     Matrix_init(&img->green_channel,img->width,img->height);
@@ -68,16 +68,16 @@ void Image_init(Image* img, std::istream& is) {
 //           "extra" space at the end of each line. See the project spec
 //           for an example.
 void Image_print(const Image* img, std::ostream& os) {
-    os << "P3" << std::endl;
-    os << img->width << " " << img->height << std::endl;
-    os << "255" << std::endl;
+    os << "P3" << '\n';
+    os << img->width << " " << img->height << '\n';
+    os << "255" << '\n';
     
     const int *red = Matrix_at(&(img->red_channel), 0, 0);
     const int *green = Matrix_at(&(img->green_channel), 0, 0);
     const int *blue = Matrix_at(&(img->blue_channel), 0, 0);
 
-    for (int i=0 ; i<img->height ; ++i){
-      for (int j=0 ; j<img->width ; ++j){
+    for (int i = 0 ; i < img->height ; ++i) {
+      for (int j = 0 ; j < img->width ; ++j) {
         os << *red << " ";
         os << *green << " ";
         os << *blue << " ";
@@ -110,11 +110,15 @@ int Image_height(const Image* img) {
 //           0 <= column && column < Image_width(img)
 // EFFECTS:  Returns the pixel in the Image at the given row and column.
 Pixel Image_get_pixel(const Image* img, int row, int column) {
+    assert(0 <= row && row < img->height);
+    assert(0 <= column && column < img->width);
+
     int red = *Matrix_at(&img->red_channel, row, column);
     int green = *Matrix_at(&img->green_channel, row, column);
     int blue = *Matrix_at(&img->blue_channel, row, column);
     
-    Pixel pix{red,green,blue};
+    Pixel pix{red, green, blue};
+
     return pix; 
 }
 
@@ -128,6 +132,7 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
     assert(0 <= row && row < img->height);
     assert(0 <= column && column < img->width);
+
     *Matrix_at(&img->red_channel, row, column) = color.r;
     *Matrix_at(&img->green_channel, row, column) = color.g;
     *Matrix_at(&img->blue_channel, row, column) = color.b;
